@@ -7,6 +7,7 @@ Image manipulation using [GM](https://www.npmjs.com/package/gm)
 - image dynamic caching
 - simple image manipulation
 - promisified methods
+- S3 support
 
 #### Getting started
 ...
