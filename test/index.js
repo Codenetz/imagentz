@@ -1,13 +1,7 @@
-import {expect} from 'chai';
+import { expect } from 'chai';
 
-let foo = () => {
-  return null;
-};
-
-describe('#resource', function() {
-  context('without arguments', function() {
-    it('should return 0', function() {
-      expect(foo()).to.equal(null);
-    });
+describe('#test', function() {
+  it('should return true', function() {
+    expect((() => true)()).to.equal(true);
   });
 });
