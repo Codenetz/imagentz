@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Image manipulation using [GM](https://www.npmjs.com/package/gm)",
   "main": "build/index.js",
+  "engines": {
+    "node": ">= 8",
+    "npm" : ">= 5.2"
+  },
   "directories": {
     "example": "examples",
     "test": "test"
