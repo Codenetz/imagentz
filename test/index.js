@@ -7,7 +7,8 @@ describe('#test', () => {
 
     let output = await imagentz
       .resource(
-        'https://raw.githubusercontent.com/Codenetz/is-remote/master/test/bar.png'
+        // 'https://raw.githubusercontent.com/Codenetz/is-remote/master/test/bar.png'
+        '/home/codenetz/projects/imagentz/test/bar.png'
       )
       .quality(10)
       .resize(100, 100)

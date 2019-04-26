@@ -1,11 +1,12 @@
 import isRemote from 'is-remote';
 import sharp from 'sharp';
-import getBuffer from './getBuffer';
+import getBufferRemote from './getBufferRemote';
+import getBufferLocal from './getBufferLocal';
 
 export default async path => {
   if (await isRemote(path)) {
-    return sharp(await getBuffer(path));
+    return sharp(await getBufferRemote(path));
   }
 
-  return null;
+  return sharp(getBufferLocal(path));
 };
