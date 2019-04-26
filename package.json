@@ -41,6 +41,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
     "is-remote": "^1.1.2",
+    "mkdirp": "^0.5.1",
     "request": "^2.88.0",
     "sharp": "^0.22.1"
   }

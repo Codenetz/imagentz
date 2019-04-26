@@ -1,12 +1,23 @@
 import Resource from './image/resource';
 import Manipulator from './manipulator';
 import CachePath from './cache/path';
+import CacheExists from './cache/exists';
+import sharp from 'sharp';
+import mkdirp from 'mkdirp';
+import path from 'path';
 
 export default class Index {
-  constructor() {
+  constructor(config) {
     this._manipulators = [];
     this._resource = null;
     this._resource_path = null;
+    this._config = Object.assign(
+      {
+        output: [],
+        fallback: null
+      },
+      config
+    );
   }
 
   resource = path => {
@@ -31,8 +42,16 @@ export default class Index {
   output = () => {
     return new Promise(resolve => {
       Promise.all([this._resource]).then(([resource]) => {
+        let images = [];
+
         this._manipulators.forEach(manipulator => {
           const cachePathName = CachePath(this._resource_path, [manipulator]);
+          const fullCachePath = String(
+            this._config.output_dir + cachePathName
+          ).replace(/\/\//g, '/');
+
+          /** Creates cache folders */
+          mkdirp.sync(path.dirname(fullCachePath));
 
           /** TODO
            *
@@ -42,6 +61,23 @@ export default class Index {
            * - Save cache local/s3 or both
            * - Catch exception if original file is not found and use fallback
            */
+
+          if (CacheExists(fullCachePath)) {
+            images.push({
+              path: cachePathName,
+              manipulator
+            });
+            return;
+          }
+
+          /** Saves local file */
+          sharp(resource)
+            .toFile(fullCachePath);
+
+          images.push({
+            path: cachePathName,
+            manipulator
+          });
 
           console.log(resource, cachePathName, manipulator);
         });

@@ -1,10 +1,14 @@
 import { expect } from 'chai';
 import Imagentz from './../src/index';
-import Manipulator from './../src/manipulator';
 
 describe('#test', () => {
   it('should return true', async () => {
-    let imagentz = new Imagentz();
+
+    let imagentz = new Imagentz({
+      // output: ['/tmp/image', '@S3/cache/images/'],
+      output_dir: '/tmp/image/',
+      fallback: '/img.jpeg'
+    });
 
     let output = await imagentz
       .resource(
