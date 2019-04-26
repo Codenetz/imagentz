@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import Imagentz from './../src/index';
+import Manipulator from './../src/manipulator';
 
 describe('#test', () => {
   it('should return true', async () => {
@@ -10,8 +11,18 @@ describe('#test', () => {
         // 'https://raw.githubusercontent.com/Codenetz/is-remote/master/test/bar.png'
         '/home/codenetz/projects/imagentz/test/bar.png'
       )
-      .quality(10)
-      .resize(100, 100)
+      .addManipulator(manipulator =>
+        manipulator
+          .quality(10)
+          .transparent(0)
+          .resize(100, 100)
+      )
+      .addManipulator(manipulator =>
+        manipulator
+          .quality(10)
+          .transparent(0)
+          .resize(300, 300)
+      )
       .output();
 
     expect((() => true)()).to.equal(true);

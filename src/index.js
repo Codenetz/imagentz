@@ -1,26 +1,17 @@
 import Resource from './image/resource';
+import Manipulator from './manipulator';
+import CachePath from './cache/path';
 
-export default class {
+export default class Index {
+  constructor() {
+    this._manipulators = [];
+    this._resource = null;
+    this._resource_path = null;
+  }
+
   resource = path => {
+    this._resource_path = path;
     this._resource = Resource(path);
-    return this;
-  };
-
-  quality = value => {
-    this._quality = value;
-    return this;
-  };
-
-  transparent = value => {
-    this._transparent = value;
-    return this;
-  };
-
-  resize = (width, height) => {
-    this._resize = {
-      width,
-      height
-    };
     return this;
   };
 
@@ -32,10 +23,29 @@ export default class {
     return this;
   };
 
+  addManipulator = cb => {
+    this._manipulators.push(cb(new Manipulator(this._resource_path)));
+    return this;
+  };
+
   output = () => {
     return new Promise(resolve => {
       Promise.all([this._resource]).then(([resource]) => {
-        console.log('resource', resource);
+        this._manipulators.forEach(manipulator => {
+          const cachePathName = CachePath(this._resource_path, [manipulator]);
+
+          /** TODO
+           *
+           * - Check if cache exists
+           * - Create sharp object
+           * - Use manipulator options to process image
+           * - Save cache local/s3 or both
+           * - Catch exception if original file is not found and use fallback
+           */
+
+          console.log(resource, cachePathName, manipulator);
+        });
+
         return resolve(this);
       });
     });
