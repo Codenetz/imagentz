@@ -4,15 +4,15 @@
   "description": "Image manipulation using [GM](https://www.npmjs.com/package/gm)",
   "main": "build/index.js",
   "engines": {
-    "node": ">= 8",
-    "npm" : ">= 5.2"
+    "node": ">= 8.0.0",
+    "npm": ">= 5.2"
   },
   "directories": {
     "example": "examples",
     "test": "test"
   },
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha --require @babel/register",
+    "test": "node ./node_modules/mocha/bin/mocha --require @babel/polyfill --require @babel/register",
     "build": "rm -rf build && npx babel src --out-dir build"
   },
   "repository": {
@@ -37,5 +37,11 @@
     "eslint": "^5.16.0",
     "mocha": "^6.1.4",
     "prettier": "^1.17.0"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.3",
+    "is-remote": "^1.1.2",
+    "request": "^2.88.0",
+    "sharp": "^0.22.1"
   }
 }

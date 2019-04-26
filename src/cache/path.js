@@ -6,7 +6,7 @@ export default (filename, options = []) => {
     throw TypeError('Filename must be a string');
 
   const signature = JSON.stringify(options);
-  const cache_hash = crypto
+  const cacheHash = crypto
     .createHash('sha1')
     .update(filename + signature)
     .digest('hex');
@@ -15,8 +15,8 @@ export default (filename, options = []) => {
 
   let path = [];
   for (let i = 0; i < 5; i++) {
-    path.push(cache_hash.charAt(i));
+    path.push(cacheHash.charAt(i));
   }
 
-  return '/cache/' + path.join('/') + '/' + cache_hash + '.' + extension;
+  return '/cache/' + path.join('/') + '/' + cacheHash + '.' + extension;
 };
