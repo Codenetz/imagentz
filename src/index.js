@@ -60,7 +60,7 @@ export default class Index {
       let resource = await this._getResource();
       let images = {};
 
-      this._manipulators.forEach(manipulator => {
+      for (const manipulator of this._manipulators) {
         /** Creates cache pathname */
         const cachePathName = CachePath(
           ChangeExtension(this._resource_path, manipulator.getFormat()),
@@ -83,7 +83,7 @@ export default class Index {
         }
 
         const processedResource = Process(resource, manipulator);
-        Save(processedResource, new SaveConfig().local(fullCachePath));
+        await Save(processedResource, new SaveConfig().local(fullCachePath));
 
         Object.assign(images, {
           [manipulator.getKey()]: {
@@ -91,7 +91,7 @@ export default class Index {
             size: getSize(fullCachePath)
           }
         });
-      });
+      }
 
       return resolve(images);
     });

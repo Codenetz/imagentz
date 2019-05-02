@@ -18,5 +18,5 @@ export default (filename, options = []) => {
     path.push(cacheHash.charAt(i));
   }
 
-  return '/cache/' + path.join('/') + '/' + cacheHash + '.' + extension;
+  return path.join('/') + '/' + cacheHash + '.' + extension;
 };

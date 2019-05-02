@@ -32,11 +32,17 @@ export const Process = (resource, manipulator) => {
   return sharp_resource;
 };
 
-export const Save = (sharp_resource, saveConfig) => {
+export const Save = async (sharp_resource, saveConfig) => {
+  return new Promise(async resolve => {
+    if (saveConfig.isLocalEnabled()) {
+      sharp_resource.toFile(saveConfig.getLocal().path, (err, res) => {
+        resolve({
+          width: res.width,
+          height: res.height
+        });
+      });
+    }
 
-  if (saveConfig.isLocalEnabled()) {
-    sharp_resource.toFile(saveConfig.getLocal().path);
-  }
-
-  /** TODO Save to S3 */
+    /** TODO Save to S3 */
+  });
 };
