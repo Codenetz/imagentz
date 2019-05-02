@@ -1,0 +1,12 @@
+.idea
+.DS_Store
+node_modules
+npm-debug.log
+package-lock.json
+src
+test
+.gitignore
+.travis.yml
+.eslintrc.js
+.babelrc
+examples

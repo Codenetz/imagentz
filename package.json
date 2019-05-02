@@ -1,7 +1,7 @@
 {
   "name": "imagentz",
   "version": "1.0.0",
-  "description": "Image manipulation using [GM](https://www.npmjs.com/package/gm)",
+  "description": "Image manipulation using [sharp](https://www.npmjs.com/package/sharp)",
   "main": "build/index.js",
   "engines": {
     "node": ">= 8.0.0",
@@ -13,12 +13,21 @@
   },
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha --require @babel/polyfill --require @babel/register",
-    "build": "rm -rf build && npx babel src --out-dir build"
+    "build": "rm -rf build && npx babel src --out-dir build",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Codenetz/imagentz.git"
   },
+  "keywords": [
+    "image",
+    "processing",
+    "cache",
+    "manipulation",
+    "s3",
+    "url"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {

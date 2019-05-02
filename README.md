@@ -1,11 +1,11 @@
 # Imagentz [![Build Status](https://travis-ci.org/Codenetz/imagentz.svg?branch=master)](https://travis-ci.org/Codenetz/imagentz)
 
-Image manipulation using [GM](https://www.npmjs.com/package/gm)
+Image manipulation using [sharp](https://www.npmjs.com/package/sharp)
 
 #### Features:
 
 - image dynamic caching
-- simple image manipulation
+- image manipulation using sharp
 - promisified methods
 - S3 support
 
