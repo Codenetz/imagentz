@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import Resource from './image/resource';
 import Manipulator from './manipulators/manipulator';
 import CachePath from './cache/path';
