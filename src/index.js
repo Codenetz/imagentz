@@ -1,10 +1,11 @@
 import Resource from './image/resource';
-import Manipulator from './manipulator';
+import Manipulator from './manipulators/manipulator';
 import CachePath from './cache/path';
 import CacheExists from './cache/exists';
-import sharp from 'sharp';
-import mkdirp from 'mkdirp';
-import path from 'path';
+import ChangeExtension from './file/changeExtension';
+import { Process, Save } from './manipulators/processor';
+import SaveConfig from './manipulators/saveConfig';
+import Concat from './file/concat';
 
 export default class Index {
   constructor(config) {
@@ -35,55 +36,56 @@ export default class Index {
   };
 
   addManipulator = cb => {
-    this._manipulators.push(cb(new Manipulator(this._resource_path)));
+    this._manipulators.push(cb(new Manipulator()));
     return this;
   };
 
+  _getResource = async () => {
+    let resource = null;
+
+    try {
+      resource = await this._resource;
+    } catch (e) {
+      this.resource(this._config.fallback);
+      resource = await this._resource;
+    }
+
+    return resource;
+  };
+
   output = () => {
-    return new Promise(resolve => {
-      Promise.all([this._resource]).then(([resource]) => {
-        let images = [];
+    return new Promise(async resolve => {
+      let resource = await this._getResource();
+      let images = [];
 
-        this._manipulators.forEach(manipulator => {
-          const cachePathName = CachePath(this._resource_path, [manipulator]);
-          const fullCachePath = String(
-            this._config.output_dir + cachePathName
-          ).replace(/\/\//g, '/');
+      this._manipulators.forEach(manipulator => {
+        /** Creates cache pathname */
+        const cachePathName = CachePath(
+          ChangeExtension(this._resource_path, manipulator.getFormat()),
+          [manipulator]
+        );
 
-          /** Creates cache folders */
-          mkdirp.sync(path.dirname(fullCachePath));
+        /** Full pathname of cache path */
+        const fullCachePath = Concat([this._config.output_dir, cachePathName]);
 
-          /** TODO
-           *
-           * - Check if cache exists
-           * - Create sharp object
-           * - Use manipulator options to process image
-           * - Save cache local/s3 or both
-           * - Catch exception if original file is not found and use fallback
-           */
-
-          if (CacheExists(fullCachePath)) {
-            images.push({
-              path: cachePathName,
-              manipulator
-            });
-            return;
-          }
-
-          /** Saves local file */
-          sharp(resource)
-            .toFile(fullCachePath);
-
+        if (CacheExists(fullCachePath)) {
           images.push({
             path: cachePathName,
             manipulator
           });
+          return;
+        }
 
-          console.log(resource, cachePathName, manipulator);
+        const processedResource = Process(resource, manipulator);
+        Save(processedResource, new SaveConfig().local(fullCachePath));
+
+        images.push({
+          path: cachePathName,
+          manipulator
         });
-
-        return resolve(this);
       });
+
+      return resolve(this);
     });
   };
 }

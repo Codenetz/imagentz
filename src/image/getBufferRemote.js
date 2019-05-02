@@ -2,8 +2,7 @@ import request from 'request';
 
 export default path => {
   return new Promise(resolve => {
-    request.defaults({ encoding: null });
-    request.get(path, (error, response, body) => {
+    request.get({ uri: path, encoding: null }, (error, response, body) => {
       if (error) {
         throw new Error(error);
       }
