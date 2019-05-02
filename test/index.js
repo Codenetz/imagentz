@@ -18,20 +18,22 @@ describe('#test', () => {
       )
       .addManipulator(manipulator =>
         manipulator
+          .key('thumb_big')
           .quality(99)
           .formatOptions({
-            force: true,
+            // force: true,
             quality: 90
           })
           .resize({
             width: 300,
-            height: 300,
-            fit: sharp.fit.cover,
-            position: sharp.strategy.entropy
+            // height: 300,
+            // fit: sharp.fit.cover,
+            // position: sharp.strategy.entropy
           })
       )
       .addManipulator(manipulator =>
         manipulator
+          .key('scaled')
           .quality(9)
           .usePNG()
           .formatOptions({

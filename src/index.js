@@ -6,6 +6,7 @@ import CacheExists from './cache/exists';
 import ChangeExtension from './file/changeExtension';
 import { Process, Save } from './manipulators/processor';
 import SaveConfig from './manipulators/saveConfig';
+import getSize from './image/getSize';
 import Concat from './file/concat';
 
 export default class Index {
@@ -57,7 +58,7 @@ export default class Index {
   output = () => {
     return new Promise(async resolve => {
       let resource = await this._getResource();
-      let images = [];
+      let images = {};
 
       this._manipulators.forEach(manipulator => {
         /** Creates cache pathname */
@@ -70,9 +71,13 @@ export default class Index {
         const fullCachePath = Concat([this._config.output_dir, cachePathName]);
 
         if (CacheExists(fullCachePath)) {
-          images.push({
-            path: cachePathName,
-            manipulator
+          /** TODO Cache results */
+
+          Object.assign(images, {
+            [manipulator.getKey()]: {
+              path: cachePathName,
+              size: getSize(fullCachePath)
+            }
           });
           return;
         }
@@ -80,13 +85,15 @@ export default class Index {
         const processedResource = Process(resource, manipulator);
         Save(processedResource, new SaveConfig().local(fullCachePath));
 
-        images.push({
-          path: cachePathName,
-          manipulator
+        Object.assign(images, {
+          [manipulator.getKey()]: {
+            path: cachePathName,
+            size: getSize(fullCachePath)
+          }
         });
       });
 
-      return resolve(this);
+      return resolve(images);
     });
   };
 }
