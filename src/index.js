@@ -79,7 +79,7 @@ export default class Index {
               size: getSize(fullCachePath)
             }
           });
-          return;
+          return resolve(images);
         }
 
         const processedResource = Process(resource, manipulator);
