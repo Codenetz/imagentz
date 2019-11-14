@@ -12,7 +12,6 @@ import Concat from './file/concat';
 export default class Index {
   constructor(config) {
     this._manipulators = [];
-    this._resource = null;
     this._resource_path = null;
     this._config = Object.assign(
       {
@@ -25,7 +24,6 @@ export default class Index {
 
   resource = path => {
     this._resource_path = path;
-    this._resource = Resource(path);
     return this;
   };
 
@@ -43,16 +41,16 @@ export default class Index {
   };
 
   _getResource = async () => {
-    let resource = null;
-
     try {
-      resource = await this._resource;
+      return await Resource(this._resource_path);
     } catch (e) {
-      this.resource(this._config.fallback);
-      resource = await this._resource;
+      try {
+        this.resource(this._config.fallback);
+        return await Resource(this._resource_path);
+      } catch (e) {
+        throw new Error('Fallback image is not found');
+      }
     }
-
-    return resource;
   };
 
   output = () => {

@@ -5,7 +5,4 @@ npm-debug.log
 package-lock.json
 build
 test/build
-
-#TODO Remove from ignore
-examples
-test
+example/cache
