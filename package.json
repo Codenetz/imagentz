@@ -1,6 +1,6 @@
 {
   "name": "imagentz",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "Image manipulation using [sharp](https://www.npmjs.com/package/sharp)",
   "main": "build/index.js",
   "engines": {
@@ -53,6 +53,6 @@
     "is-remote": "^1.1.2",
     "mkdirp": "^0.5.1",
     "request": "^2.88.0",
-    "sharp": "^0.22.1"
+    "sharp": "^0.23.4"
   }
 }
