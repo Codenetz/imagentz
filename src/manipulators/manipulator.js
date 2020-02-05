@@ -29,6 +29,10 @@ export default class {
     return this;
   };
 
+  useWEBP = () => {
+    return this.format(IMAGE_FORMATS.WEBP);
+  };
+
   usePNG = () => {
     return this.format(IMAGE_FORMATS.PNG);
   };

@@ -1,11 +1,22 @@
 import sharp from 'sharp';
-import { JPEG, PNG } from '../constants/extensions';
+import { JPEG, PNG, WEBP } from '../constants/extensions';
 
 export const Process = (resource, manipulator) => {
   let sharp_resource = sharp(resource);
 
   /** Saves local file */
   sharp_resource.resize(manipulator.getResize());
+
+  if (manipulator.getFormat() === WEBP) {
+    sharp_resource.webp(
+      Object.assign(
+        {
+          quality: manipulator.getQuality()
+        },
+        manipulator.getFormatOptions()
+      )
+    );
+  }
 
   if (manipulator.getFormat() === JPEG) {
     sharp_resource.jpeg(
