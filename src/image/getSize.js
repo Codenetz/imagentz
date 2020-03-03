@@ -1,5 +1,5 @@
 import sizeOf from 'image-size';
-export default path => {
-  const { width, height } = sizeOf(path);
+export default data => {
+  const { width, height } = sizeOf(data);
   return { width, height };
 };

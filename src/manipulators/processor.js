@@ -4,7 +4,6 @@ import { JPEG, PNG, WEBP } from '../constants/extensions';
 export const Process = (resource, manipulator) => {
   let sharp_resource = sharp(resource);
 
-  /** Saves local file */
   sharp_resource.resize(manipulator.getResize());
 
   if (manipulator.getFormat() === WEBP) {
@@ -44,6 +43,7 @@ export const Process = (resource, manipulator) => {
 };
 
 export const Save = async (sharp_resource, saveConfig) => {
+  // eslint-disable-next-line no-undef
   return new Promise(async resolve => {
     if (saveConfig.isLocalEnabled()) {
       sharp_resource.toFile(saveConfig.getLocal().path, (err, res) => {
@@ -53,7 +53,5 @@ export const Save = async (sharp_resource, saveConfig) => {
         });
       });
     }
-
-    /** TODO Save to S3 */
   });
 };

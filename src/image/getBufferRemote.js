@@ -4,14 +4,14 @@ export default path => {
   return new Promise(resolve => {
     request.get({ uri: path, encoding: null }, (error, response, body) => {
       if (error) {
-        throw new Error(error);
+        return resolve(null);
       }
 
       if (response.statusCode === 200) {
         return resolve(new Buffer.from(body));
       }
 
-      return null;
+      return resolve(null);
     });
   });
 };

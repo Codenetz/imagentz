@@ -50,6 +50,7 @@ export default class {
     return this;
   };
 
+  getMime = () => 'image/' + this.getFormat();
   getKey = () => this._key;
   getResize = () => this._resize;
   getQuality = () => this._quality;
