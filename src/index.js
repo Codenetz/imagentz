@@ -18,6 +18,7 @@ export default class Index {
   constructor(config) {
     this._manipulators = [];
     this._resource_path = null;
+    this._resource_buffer = null;
     this._config = Object.assign(
       {
         output: [],
@@ -26,6 +27,16 @@ export default class Index {
       config
     );
   }
+
+  resourceBuffer = buffer => {
+    this._resource_buffer = buffer;
+    this._resource_path =
+      Date.now() +
+      '-' +
+      Math.floor(Math.random() * Math.floor(99999999)) +
+      '.jpeg';
+    return this;
+  };
 
   resource = path => {
     this._resource_path = path;
@@ -70,6 +81,10 @@ export default class Index {
   };
 
   getResource = async () => {
+    if (this._resource_buffer) {
+      return this._resource_buffer;
+    }
+
     let resource = await Resource(this._resource_path);
 
     if (resource === null) {
