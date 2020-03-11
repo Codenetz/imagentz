@@ -1,24 +1,30 @@
 import '@babel/polyfill';
-import Resource from './image/resource';
+import crypto from 'crypto';
 import Manipulator from './manipulators/manipulator';
 import CachePath from './cache/path';
 import ChangeExtension from './file/changeExtension';
-import { save as saveS3, client as AWSClient } from './aws';
-import { Process, Save } from './manipulators/processor';
-import SaveConfig from './manipulators/saveConfig';
-import getSize from './image/getSize';
+import Process from './manipulators/processor';
 import Concat from './file/concat';
 import {
   client as RedisClient,
   fetch as RedisFetch,
   save as RedisSave
 } from './redis/index';
+import { saveFS, resource as Resource, getSize } from './image';
+import { save as saveS3, client as AWSClient } from './aws';
 
 export default class Index {
   constructor(config) {
     this._manipulators = [];
     this._resource_path = null;
     this._resource_buffer = null;
+    this._resource_cache_key = null;
+
+    /** Randomly generates a cache key */
+    this.resourceCacheKey(
+      Date.now() + '-' + Math.floor(Math.random() * Math.floor(99999999))
+    );
+
     this._config = Object.assign(
       {
         output: [],
@@ -30,16 +36,19 @@ export default class Index {
 
   resourceBuffer = buffer => {
     this._resource_buffer = buffer;
-    this._resource_path =
-      Date.now() +
-      '-' +
-      Math.floor(Math.random() * Math.floor(99999999)) +
-      '.jpeg';
     return this;
   };
 
-  resource = path => {
+  resourcePath = path => {
     this._resource_path = path;
+    return this;
+  };
+
+  resourceCacheKey = key => {
+    this._resource_cache_key = crypto
+      .createHash('sha1')
+      .update(key)
+      .digest('hex');
     return this;
   };
 
@@ -88,7 +97,7 @@ export default class Index {
     let resource = await Resource(this._resource_path);
 
     if (resource === null) {
-      this.resource(this._config.fallback);
+      this.resourcePath(this._config.fallback);
       resource = await Resource(this._resource_path);
     }
 
@@ -110,7 +119,7 @@ export default class Index {
       for (const manipulator of this._manipulators) {
         /** Creates cache pathname */
         const cachePathName = CachePath(
-          ChangeExtension(this._resource_path, manipulator.getFormat()),
+          this._resource_cache_key + '.' + manipulator.getFormat(),
           [manipulator]
         );
 
@@ -137,10 +146,7 @@ export default class Index {
             manipulator.getMime(),
             processedResourceBuffer
           )
-          : await Save(
-            processedResource,
-            new SaveConfig().local(fullCachePath)
-          );
+          : await saveFS(processedResource, fullCachePath);
 
         const image = {
           [manipulator.getKey()]: {

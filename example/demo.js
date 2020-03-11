@@ -11,20 +11,26 @@ const types = new Imagentz({
   output_dir: OUTPUT_DIR,
   fallback: NOTFOUND_DEFAULT_IMAGE
 })
-  .resource(TEST_IMAGE)
+  .resourcePath(TEST_IMAGE)
+
+  /**
+   * Can be a name, filepath, id or everything that is unique and won't be changed in the future for the image.
+   * It will be randomly generated if not given.
+   */
+  .resourceCacheKey(TEST_IMAGE)
 
   .useRedis('my-prefix', {
     host: '127.0.0.1',
     port: '6379'
   })
 
-  .useS3({
-    accessKeyId: 'xxxx',
-    secretAccessKey: 'xxxx',
-    region: 'xxxx',
-    bucket: 'xxxx',
-    cdn: 'http....'
-  })
+// .useS3({
+//   accessKeyId: 'xxxx',
+//   secretAccessKey: 'xxxx',
+//   region: 'xxxx',
+//   bucket: 'xxxx',
+//   cdn: 'http....'
+// })
 
   .addManipulator(manipulator =>
     manipulator
