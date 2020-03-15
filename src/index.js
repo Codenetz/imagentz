@@ -162,6 +162,11 @@ export default class Index {
         Object.assign(images, image);
       }
 
+      /** Closes redis connection */
+      if (this.isRedisEnabled()) {
+        redisClient.client.quit();
+      }
+
       return resolve(images);
     });
   };

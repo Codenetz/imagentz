@@ -1,6 +1,6 @@
 {
   "name": "imagentz",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Image manipulation using [sharp](https://www.npmjs.com/package/sharp)",
   "main": "build/index.js",
   "engines": {
