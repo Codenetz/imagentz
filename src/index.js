@@ -19,6 +19,7 @@ export default class Index {
     this._resource_path = null;
     this._resource_buffer = null;
     this._resource_cache_key = null;
+    this._awsClient = null;
 
     /** Randomly generates a cache key */
     this.resourceCacheKey(
@@ -77,7 +78,11 @@ export default class Index {
   };
 
   getAWSClient = () => {
-    return AWSClient(this._config.aws);
+    if (!this._awsClient) {
+      this._awsClient = AWSClient(this._config.aws);
+    }
+
+    return this._awsClient;
   };
 
   isS3Enabled = () => {
@@ -112,8 +117,7 @@ export default class Index {
     return new Promise(async resolve => {
       let images = {};
 
-      const s3Client = this.isS3Enabled() ? this.getAWSClient() : null,
-        redisClient = this.isRedisEnabled() ? this.getRedisClient() : null;
+      const redisClient = this.isRedisEnabled() ? this.getRedisClient() : null;
 
       for (const manipulator of this._manipulators) {
         /** Creates cache pathname */
@@ -134,6 +138,7 @@ export default class Index {
           }
         }
 
+        const s3Client = this.isS3Enabled() ? this.getAWSClient() : null;
         const resource = await this.getResource();
         const processedResource = Process(resource, manipulator);
         const processedResourceBuffer = await processedResource.toBuffer();
