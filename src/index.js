@@ -110,8 +110,7 @@ export default class Index {
 
   output = () => {
     return new Promise(async resolve => {
-      let resource = await this.getResource(),
-        images = {};
+      let images = {};
 
       const s3Client = this.isS3Enabled() ? this.getAWSClient() : null,
         redisClient = this.isRedisEnabled() ? this.getRedisClient() : null;
@@ -135,6 +134,7 @@ export default class Index {
           }
         }
 
+        const resource = await this.getResource();
         const processedResource = Process(resource, manipulator);
         const processedResourceBuffer = await processedResource.toBuffer();
 
