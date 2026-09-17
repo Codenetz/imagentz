@@ -50,7 +50,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "aws-sdk": "^2.630.0",
-    "image-size": "^0.7.4",
+    "image-size": "npm:image-size-next@1.2.2",
     "is-remote": "^1.1.2",
     "mkdirp": "^0.5.1",
     "redis": "^3.0.2",
